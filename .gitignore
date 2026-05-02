@@ -1,0 +1,17 @@
+# Ignora tutti i file di dati UWB
+*.npz
+*.npy
+
+# Ignora la cartella specifica dei dati se l'hai messa qui
+other_files/dataset/
+
+# Ignora cartelle di cache Python e Jupyter
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# Ignora ambienti virtuali (se creati dentro la repo)
+yes/
+edge_ai_env/
+venv/
+env/
