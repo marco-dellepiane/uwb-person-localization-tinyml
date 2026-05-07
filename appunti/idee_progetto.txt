@@ -3,3 +3,8 @@ Dubbi
 
 Idee
 - Maschera delle persone per realizzare una EENN
+
+Facts:
+- Splitting solo tra window
+- size Training input = size testing input (preprocess)
+ 
