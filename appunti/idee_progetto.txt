@@ -7,4 +7,4 @@ Idee
 Facts:
 - Splitting solo tra window
 - size Training input = size testing input (preprocess)
- 
+- need to quantize
