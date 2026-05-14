@@ -3,6 +3,7 @@ Dubbi
 
 Idee
 - Maschera delle persone per realizzare una EENN
+- dimensionare bene alfa nel decluttering per non scartare persone sedute
 
 Bozza split 1
     - Training: 22, 0, 1, 2, 3, 10, 14, 16, 17, 18, 19, 21, 8, 9, 12, 5, 6, 4 ... 78%
