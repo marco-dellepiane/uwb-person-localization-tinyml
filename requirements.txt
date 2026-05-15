@@ -6,4 +6,5 @@ jupyter>=1.0.0
 
 # --- TensorFlow ---
 # on mac could be installed with: pip install tensorflow-macos
-tensorflow>=2.15.0
+tensorflow>=2.15.0 
+ipywidgets==8.1.8
