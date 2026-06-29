@@ -8,8 +8,8 @@ import os
 # 1. PARAMETRI DI NORMALIZZAZIONE (HARDCODED)
 # Sostituisci questi 0.0 e 1.0 con i valori reali stampati nel training!
 # ==============================================================================
-TRAIN_MEAN = 0.0  # <--- INSERISCI IL VALORE REALE
-TRAIN_STD = 1.0   # <--- INSERISCI IL VALORE REALE
+TRAIN_MEAN = 10.366536  # <--- INSERISCI IL VALORE REALE
+TRAIN_STD = 37.227516   # <--- INSERISCI IL VALORE REALE
 
 def process_file(input_path, output_jsonl_path, tflite_model_path="model.tflite"):
     print(f"Caricamento modello TFLite: {tflite_model_path}")
@@ -58,8 +58,12 @@ def process_file(input_path, output_jsonl_path, tflite_model_path="model.tflite"
         # B. Normalizzazione Rigorosa
         normalized = (decluttered - TRAIN_MEAN) / (TRAIN_STD + 1e-7)
 
-        # C. Quantizzazione (Float32 -> INT8)
-        input_int8 = np.round(normalized / input_scale + input_zp).astype(np.int8)
+        # C. Quantizzazione Sicura (Float32 -> INT8 con Anti-Overflow)
+        q_val = np.round(normalized / input_scale + input_zp)
+        input_int8 = np.clip(q_val, -128, 127).astype(np.int8)
+        
+        # TFLite si aspetta shape (1, 1, 120, 18)
+        input_int8 = np.expand_dims(input_int8, axis=0)
         
         # D. Inferenza
         interpreter.set_tensor(input_details['index'], input_int8)
@@ -72,6 +76,11 @@ def process_file(input_path, output_jsonl_path, tflite_model_path="model.tflite"
         # F. Post-processing: Estrazione coordinate e maschera
         coords = output_float32[0, :8].reshape(4, 2)
         mask_probs = output_float32[0, 8:] 
+        
+        # --- DEBUG: CONTROLLO MASCHERE ---
+        # Se stampiamo le probabilità, capiremo perché sono tutte > 0.5
+        if t % 500 == 0: # Stampiamo ogni 500 frame
+            print(f"Frame {t} - Probabilità: {mask_probs}")
 
         # Generazione lista localizzazioni (solo se la rete è sicura > 50%)
         localizations = []
