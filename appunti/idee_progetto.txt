@@ -2,16 +2,19 @@ Dubbi
 - A che serve la maschera delle persone?
 - cazzo serve sram
 - posso "creare " dati?
-Idee
-- Maschera delle persone per realizzare una EENN
-- dimensionare bene alfa nel decluttering per non scartare persone sedute
-- rete con due rami diversi, elabora i elabora q e le mette insieme
 
-Bozza split 1
-    - Training: 22, 0, 1, 2, 3, 10, 14, 16, 17, 18, 19, 21, 8, 9, 12, 5, 6, 4 ... 78%
-    - Validation: 23, 7, 11, 13, 15, 20 ... 22% (per ogni numero di persone almeno un window)
+Idee romane
+- riprovare rete con elaborazione di una sliding window di frames per aggirare le vietate LSTM...ecc
+per considerare anche "comportametni" passati
+(controllare: tensorflow/tflite-micro — micro_mutable_op_resolver.h per vedere se operazioni sono supportate da TFLM)
+- provare a prendere spunto e in caso importare proprio parte di modelli già fatti e validati per task simili
+- basarsi su letteratura scietifica per identificare architetture efficaci 
+("UWB CIR human localization deep learning", "multi-radar localization TinyML",
+ "CNN for radar channel impulse response")
+    - andarsi a vedere le cose scritte da manuel roveri stesso e i suoi schiavi
+- spingere eccessivamente sul preprocessing dei dati (l'EMA decluttering (cercare lì l'innovazione 
+piuttosto che sul modello))
 
-
-Facts:
-- size Training input = size testing input (preprocess)
-- need to quantize
+- fare prove con un modelli microscopici costiutiti da davvero pochi layers ma buoni e poi aumentare le dimensioni
+ma solo in punti e parti specifiche 
+- migliorare rete con i e q separati
