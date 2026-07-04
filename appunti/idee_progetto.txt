@@ -4,6 +4,7 @@ Dubbi
 - posso "creare " dati?
 
 Idee romane
+- forse non tutti i radar ...
 - riprovare rete con elaborazione di una sliding window di frames per aggirare le vietate LSTM...ecc
 per considerare anche "comportametni" passati
 (controllare: tensorflow/tflite-micro — micro_mutable_op_resolver.h per vedere se operazioni sono supportate da TFLM)
@@ -14,6 +15,7 @@ per considerare anche "comportametni" passati
     - andarsi a vedere le cose scritte da manuel roveri stesso e i suoi schiavi
 - spingere eccessivamente sul preprocessing dei dati (l'EMA decluttering (cercare lì l'innovazione 
 piuttosto che sul modello))
+- capire come l'uso di non tutti i radar e quindi di una selezione di questi potrebbe impattare sulle performance
 
 - fare prove con un modelli microscopici costiutiti da davvero pochi layers ma buoni e poi aumentare le dimensioni
 ma solo in punti e parti specifiche 
