@@ -17,6 +17,20 @@ per considerare anche "comportametni" passati
 piuttosto che sul modello))
 - capire come l'uso di non tutti i radar e quindi di una selezione di questi potrebbe impattare sulle performance
 
+Parameter tuning / tentativi di updgrad su modello con RRM (prova8_romana)
+- alpha data engine
+- split traning-validation
+- coefficienti in hungarian (1.5)
+- numero di radar
+- batch size
+- optimizer nella compilazione
+- dimensioni dell'architettura (penultima cosa...penso difficile che aumentando migliori)
+- F,r e in generale architettura (ultima cosa che guarderei)
+
+- normalizzazioine/standardizzazione in data engine
+- provare a fondere approcci da altri modelli (es dbf, sliding window o approcci toscani)
+- 
+
 - fare prove con un modelli microscopici costiutiti da davvero pochi layers ma buoni e poi aumentare le dimensioni
 ma solo in punti e parti specifiche 
 - migliorare rete con i e q separati
