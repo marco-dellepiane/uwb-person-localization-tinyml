@@ -17,15 +17,15 @@ per considerare anche "comportametni" passati
 piuttosto che sul modello))
 - capire come l'uso di non tutti i radar e quindi di una selezione di questi potrebbe impattare sulle performance
 
-Parameter tuning / tentativi di updgrad su modello con RRM (prova8_romana)
-- alpha data engine
+Pipeline per parameter tuning / tentativi di upgrade su modello con RRM (prova8_romana)
+- alpha data engines
 - split traning-validation
 - coefficienti in hungarian (1.5)
 - numero di radar
 - batch size
 - optimizer nella compilazione
 - dimensioni dell'architettura (penultima cosa...penso difficile che aumentando migliori)
-- F,r e in generale architettura (ultima cosa che guarderei)
+- F,r e in generale architettura (ultima cosa che guarderei) (es DepthwiseConv2D invece che Conv2D)
 
 - normalizzazioine/standardizzazione in data engine
 - provare a fondere approcci da altri modelli (es dbf, sliding window o approcci toscani)
