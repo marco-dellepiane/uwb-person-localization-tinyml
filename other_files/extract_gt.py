@@ -3,8 +3,8 @@ import json
 import os
 
 # Percorso esatto del tuo file
-npz_path = "/home/marco/Desktop/test_project_edge_ai/other_files/dataset/data/window_000015.npz"
-out_path = "gt_15.jsonl"
+npz_path = "/home/marco/Desktop/test_project_edge_ai/other_files/dataset/data/window_000011.npz"
+out_path = "/home/marco/Desktop/test_project_edge_ai/other_files/gt_11.jsonl"
 
 print(f"Estrazione Ground Truth da {npz_path}...")
 data = np.load(npz_path)

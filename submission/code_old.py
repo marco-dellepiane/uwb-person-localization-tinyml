@@ -4,7 +4,9 @@ import json
 import sys
 import os
 
-ALPHA = 0.02 # Assicurati che sia lo stesso del training
+# I valori della tua V8
+TRAIN_MEAN = 13.715407
+TRAIN_STD = 45.612080
 
 def process_file(input_path, output_jsonl_path, tflite_model_path="model.tflite"):
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,47 +18,42 @@ def process_file(input_path, output_jsonl_path, tflite_model_path="model.tflite"
     input_details = interpreter.get_input_details()[0]
     output_details = interpreter.get_output_details()[0]
 
-    input_scale, input_zp = input_details['quantization']
-    output_scale, output_zp = output_details['quantization']
-
+    # Caricamento Dati
     data = np.load(input_path)
     raw_iq = data['radar_cir_iq'] if input_path.endswith('.npz') else data
     T = raw_iq.shape[0]
 
     mag = np.sqrt(raw_iq[..., 0]**2 + raw_iq[..., 1]**2).reshape(T, 1, 120, 18)
     bg = np.copy(mag[0])
+    alpha = 0.002
 
     results = []
 
     for t in range(T):
-        # 1. Pre-Processing Grezzo
-        bg = ALPHA * mag[t] + (1 - ALPHA) * bg
+        # 1. EMA (Esattamente come in Keras)
+        bg = alpha * mag[t] + (1 - alpha) * bg
         decluttered = np.abs(mag[t] - bg)
+
+        # 2. Normalizzazione
+        normalized = (decluttered - TRAIN_MEAN) / (TRAIN_STD + 1e-7)
         
-        # NESSUNA NORMALIZZAZIONE
-        input_tensor_float = np.expand_dims(decluttered.astype(np.float32), axis=0)
+        # 3. Preparazione Input (Float32 puro)
+        input_tensor = np.expand_dims(normalized.astype(np.float32), axis=0)
 
-        # 2. QUANTIZZAZIONE DELL'INPUT
-        # Il modello sa gestire i valori alti perché calibrato su di essi
-        input_tensor_quant = np.round(input_tensor_float / input_scale) + input_zp
-        input_tensor_quant = np.clip(input_tensor_quant, -128, 127).astype(np.int8)
-
-        # 3. Inferenza
-        interpreter.set_tensor(input_details['index'], input_tensor_quant)
+        # 4. Inferenza
+        interpreter.set_tensor(input_details['index'], input_tensor)
         interpreter.invoke()
         
-        # 4. DEQUANTIZZAZIONE DELL'OUTPUT
-        preds_quant = interpreter.get_tensor(output_details['index'])[0]
-        preds_float = (preds_quant.astype(np.float32) - output_zp) * output_scale
+        # L'output è già un array Float32 pulito! [1, 12]
+        preds = interpreter.get_tensor(output_details['index'])[0]
 
-        # 5. Post-Processing 
-        p_coords = preds_float[:8].reshape(4, 2)
-        p_mask = preds_float[8:]
+        # 5. Slicing e Post-Processing (Come nel visualizzatore)
+        p_coords = preds[:8].reshape(4, 2)
+        p_mask = preds[8:]
 
         localizations = []
         for i in range(4):
-            # La soglia della sigmoide (potrebbe variare leggermente in INT8)
-            if float(p_mask[i]) >= 0.85: 
+            if float(p_mask[i]) >= 0.85:
                 localizations.append([round(float(p_coords[i, 0]), 3), round(float(p_coords[i, 1]), 3)])
 
         results.append({
