@@ -56,8 +56,7 @@ FORBIDDEN_OPS = {
 def _load_interpreter(model_path: Path):
     import tensorflow as tf
     interpreter = tf.lite.Interpreter(
-    model_path=model_path,
-    experimental_op_resolver_type=tf.lite.experimental.OpResolverType.BUILTIN_WITHOUT_DEFAULT_DELEGATES)
+    model_path=model_path,)
     interpreter.allocate_tensors()
     return interpreter
 

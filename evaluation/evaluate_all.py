@@ -141,9 +141,11 @@ if __name__ == "__main__":
         generate_ground_truth(npz_file, gt_p)
         
         # 2. ESEGUE IL TUO CODE.PY (Come farebbe il prof da terminale)
-        # Comando: python code.py input.npz output.jsonl
+        # Comando: python code.py --input-path input.npz --output-path output.jsonl
         try:
-            subprocess.run(["python", CODE_PY_PATH, npz_file, pred_p], check=True)
+            subprocess.run(["python", CODE_PY_PATH, 
+                            "--input-path", npz_file, 
+                            "--output-path", pred_p], check=True)
         except subprocess.CalledProcessError:
             print(f"❌ ERRORE CRITICO: Il tuo code.py è andato in crash sul file {filename}!")
             continue
