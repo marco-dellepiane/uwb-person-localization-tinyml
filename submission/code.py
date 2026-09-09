@@ -74,5 +74,4 @@ if __name__ == "__main__":
     parser.add_argument("--output-path", required=True, help="Path to the output .jsonl file")
     args = parser.parse_args()
     
-    # Esegue l'inferenza chiamando tassativamente 'model.tflite'
     process_file(args.input_path, args.output_path, tflite_model_path="model.tflite")

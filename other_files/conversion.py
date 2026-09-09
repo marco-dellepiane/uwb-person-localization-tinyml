@@ -12,8 +12,6 @@ GLOBAL_MAX = 203.10
 print("1. Caricamento del modello Keras 'Golden'...")
 model = tf.keras.models.load_model("/home/marco/Desktop/test_project_edge_ai/other_files/split6.keras", compile=False)
 
-print("2. Forzatura della Batch Size a 1 (Fix per XNNPACK)...")
-# Questo step previene il crash sul PC del professore
 run_model = tf.function(lambda x: model(x))
 concrete_func = run_model.get_concrete_function(
     tf.TensorSpec([1, 1, 120, 18], tf.float32)
@@ -50,7 +48,7 @@ converter = tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
 converter.representative_dataset = representative_data_gen
 
-# Full INT8 enforcement + TFLITE_BUILTINS per la massima compatibilità
+# Full INT8 enforcement 
 converter.target_spec.supported_ops = [
     tf.lite.OpsSet.TFLITE_BUILTINS_INT8,
 ]
@@ -63,4 +61,4 @@ os.makedirs("submission", exist_ok=True)
 with open("submission/model.tflite", "wb") as f:
     f.write(tflite_model)
 
-print("✅ Quantizzazione Full INT8 completata con successo! Modello pronto per il test dei vincoli.")
+print("Quantizzazione Full INT8 completata con successo! Modello pronto per il test dei vincoli.")
