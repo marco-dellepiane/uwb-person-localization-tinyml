@@ -9,7 +9,8 @@ ALPHA = 0.02
 GLOBAL_MAX = 203.10
 
 
-print("1. Caricamento del modello Keras 'Golden'...")
+
+print("1. Loading 'Golden' Keras model...")
 model = tf.keras.models.load_model("/home/marco/Desktop/test_project_edge_ai/other_files/split6.keras", compile=False)
 
 run_model = tf.function(lambda x: model(x))
@@ -17,7 +18,7 @@ concrete_func = run_model.get_concrete_function(
     tf.TensorSpec([1, 1, 120, 18], tf.float32)
 )
 
-print("3. Preparazione dei dati di calibrazione (Sulle tue 3 finestre)...")
+print("3. Preparing calibration data...")
 def representative_data_gen():
     calibration_files = [
         "/home/marco/Desktop/test_project_edge_ai/other_files/dataset/data/window_000023.npz", # 0 soggetti
@@ -43,7 +44,7 @@ def representative_data_gen():
             input_tensor = np.expand_dims(normalized.astype(np.float32), axis=0)
             yield [input_tensor]
 
-print("4. Quantizzazione INT8 in corso...")
+print("4. INT8 Quantization in progress...")
 converter = tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
 converter.representative_dataset = representative_data_gen
@@ -61,4 +62,4 @@ os.makedirs("submission", exist_ok=True)
 with open("submission/model.tflite", "wb") as f:
     f.write(tflite_model)
 
-print("Quantizzazione Full INT8 completata con successo! Modello pronto per il test dei vincoli.")
+print("Full INT8 Quantization successful! Model ready for constraint testing.")

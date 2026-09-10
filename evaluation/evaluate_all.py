@@ -7,10 +7,10 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 # ==============================================================================
-# CONFIGURAZIONE
+# CONFIG
 # ==============================================================================
 DATASET_DIR = "/home/marco/Desktop/test_project_edge_ai/other_files/dataset/data"
-CODE_PY_PATH = "/home/marco/Desktop/test_project_edge_ai/submission/code.py" # Assicurati che questo sia il percorso corretto al tuo code.py
+CODE_PY_PATH = "/home/marco/Desktop/test_project_edge_ai/submission/code.py"
 
 OUT_GT_DIR = "/home/marco/Desktop/test_project_edge_ai/evaluation/gt_files"
 OUT_PRED_DIR = "/home/marco/Desktop/test_project_edge_ai/evaluation/pred_files"
@@ -21,7 +21,7 @@ MATCH_THRESHOLD = 1.0
 VAL_INDICES = [23, 20, 3, 15, 7, 11] 
 TRAIN_INDICES = [22, 16, 17, 18, 19, 21, 0, 1, 2, 4, 12, 13, 14, 5, 6, 8, 9, 10]
 
-# Split2 (80% train e 22% val), stesso cocetto di split 1 "STRESS TEST sul MULTIPATH"
+
 #VAL_INDICES = [23, 20, 0, 13, 9] 
 #TRAIN_INDICES = [22, 16, 17, 18, 19, 21, 1, 2, 3, 4, 12, 14, 15, 5, 6, 7, 8, 10, 11]
 
@@ -29,7 +29,7 @@ os.makedirs(OUT_GT_DIR, exist_ok=True)
 os.makedirs(OUT_PRED_DIR, exist_ok=True)
 
 # ==============================================================================
-# FUNZIONI DI VALUTAZIONE (Hungarian Matching)
+# Hungarian Matching
 # ==============================================================================
 def _cost_matrix(gt: list, pred: list) -> np.ndarray:
     gt_arr   = np.array(gt,   dtype=np.float64)
@@ -121,8 +121,7 @@ def evaluate_single_window(gt_path, pred_path, window_name, split_label):
 if __name__ == "__main__":
     all_files = sorted(glob.glob(os.path.join(DATASET_DIR, "*.npz")))
 
-    print("🚀 Inizio valutazione tramite invocazione di code.py...\n")
-    
+    print("🚀 Starting evaluation via code.py invocation...\n")    
     for npz_file in all_files:
         filename = os.path.basename(npz_file)
         base_name = filename.replace('.npz', '')
@@ -140,17 +139,16 @@ if __name__ == "__main__":
         # 1. Genera la Ground Truth
         generate_ground_truth(npz_file, gt_p)
         
-        # 2. ESEGUE IL TUO CODE.PY (Come farebbe il prof da terminale)
-        # Comando: python code.py --input-path input.npz --output-path output.jsonl
+        # 2. RUN INFERENCE SCRIPT
         try:
             subprocess.run(["python", CODE_PY_PATH, 
                             "--input-path", npz_file, 
                             "--output-path", pred_p], check=True)
         except subprocess.CalledProcessError:
-            print(f"❌ ERRORE CRITICO: Il tuo code.py è andato in crash sul file {filename}!")
+            print(f"❌ CRITICAL ERROR: Inference script crashed on file {filename}!")
             continue
         
         # 3. Valuta e stampa a schermo
         evaluate_single_window(gt_p, pred_p, base_name, split_label)
         
-    print("✅ Analisi completata! Il tuo code.py ha processato tutti i file con successo.")
+    print("✅ Analysis complete! All files processed successfully.")

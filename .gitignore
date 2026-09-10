@@ -1,17 +1,42 @@
-# Ignora tutti i file di dati UWB
-*.npz
-*.npy
+# --- OS & System Files ---
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+.Spotlight-V100
 
-# Ignora la cartella specifica dei dati se l'hai messa qui
-other_files/dataset/
-
-# Ignora cartelle di cache Python e Jupyter
+# --- Python & Jupyter ---
 __pycache__/
+*.py[cod]
+*$py.class
 .ipynb_checkpoints/
-*.pyc
+.pytest_cache/
 
-# Ignora ambienti virtuali (se creati dentro la repo)
+# --- Virtual Environments ---
 yes/
 edge_ai_env/
 venv/
 env/
+.venv/
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+
+# --- UWB Radar Data ---
+*.npz
+*.npy
+other_files/dataset/
+
+# --- Heavy Models & Intermediate Files ---
+*.keras
+*.h5
+*.pb
+
+# --- Evaluation Outputs & Logs ---
+evaluation/gt_files/
+evaluation/pred_files/
+*.log
+*training_log.txt
+*.xlsx
+trajectory_plot_report.png

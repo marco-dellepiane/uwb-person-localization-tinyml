@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --- CONFIGURAZIONE ---
+# --- CONFIG ---
 # Usiamo la Window 19 (Serpentine walk 1 subject)
 GT_FILE = "/home/marco/Desktop/test_project_edge_ai/evaluation/gt_files/window_000019_gt.jsonl"
 PRED_FILE = "/home/marco/Desktop/test_project_edge_ai/evaluation/pred_files/window_000019_pred.jsonl"

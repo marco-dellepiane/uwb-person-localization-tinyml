@@ -1,14 +1,14 @@
 import numpy as np
 import tensorflow as tf
 
-print("=== DIAGNOSTICA PURA TFLITE ===")
+print("=== TFLITE DIAGNOSTICS ===")
 interpreter = tf.lite.Interpreter(model_path="submission/model.tflite")
 interpreter.allocate_tensors()
 
 in_details = interpreter.get_input_details()[0]
 out_details = interpreter.get_output_details()
 
-print(f"Numero di output trovati: {len(out_details)}\n")
+print(f"Number of outputs found: {len(out_details)}\n")
 
 for i, out in enumerate(out_details):
     print(f"OUTPUT {i}:")
@@ -32,9 +32,9 @@ input_int8 = np.clip(q_val, -128, 127).astype(np.int8)
 interpreter.set_tensor(in_details['index'], input_int8)
 interpreter.invoke()
 
-print("\n=== VALORI DECIFRATI DAL MODELLO ===")
+print("\n=== DECODED MODEL VALUES ===")
 for i, out in enumerate(out_details):
     tensor = interpreter.get_tensor(out['index'])
     scale, zp = out['quantization']
     float_val = (tensor.astype(np.float32) - zp) * scale
-    print(f"Valori reali Output {i}: {float_val.flatten()}")
+    print(f"Real Output Values {i}: {float_val.flatten()}")
